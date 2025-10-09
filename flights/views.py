@@ -1,13 +1,17 @@
 from rest_framework import viewsets
+from rest_framework.exceptions import ValidationError
+
 
 from .models import (
     Airport,
-    Route
+    Route,
+    AirplaneType
 )
 from .serializers import (
     AirportSerializer,
     RouteDetailListSerializer,
-    RouteCreateSerializer
+    RouteCreateSerializer,
+    AirplaneTypeSerializer
 )
 
 
@@ -50,5 +54,21 @@ class RouteViewSet(viewsets.ModelViewSet):
                 queryset = queryset.filter(
                     destination__closest_big_city__in=destinations_list
                 )
-
         return queryset
+
+    def create(self, request, *args, **kwargs):
+        source = request.data.get("source")
+        destination = request.data.get("destination")
+
+        if source == destination:
+            raise ValidationError(
+                "Source and destination cannot be the same.")
+        return super().create(request, *args, **kwargs)
+
+
+class AirplaneTypeViewSet(viewsets.ModelViewSet):
+    queryset = AirplaneType.objects.all()
+    serializer_class = AirplaneTypeSerializer
+
+
+

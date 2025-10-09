@@ -1,6 +1,11 @@
 from rest_framework import serializers
 
-from .models import (Airport, Route)
+from .models import (
+    Airport,
+    Route,
+    AirplaneType,
+    Airplane
+)
 
 
 class AirportSerializer(serializers.ModelSerializer):
@@ -28,3 +33,14 @@ class RouteCreateSerializer(serializers.ModelSerializer):
         model = Route
         fields = "__all__"
 
+
+class AirplaneTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AirplaneType
+        fields = "__all__"
+
+
+class AirplaneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Airplane
+        fields = "__all__"
