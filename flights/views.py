@@ -6,7 +6,8 @@ from .models import (
 )
 from .serializers import (
     AirportSerializer,
-    RouteSerializer,
+    RouteDetailListSerializer,
+    RouteCreateSerializer
 )
 
 
@@ -16,5 +17,38 @@ class AirportViewSet(viewsets.ModelViewSet):
 
 
 class RouteViewSet(viewsets.ModelViewSet):
-    queryset = Route.objects.all()
-    serializer_class = RouteSerializer
+    queryset = Route.objects.all().select_related("source", "destination")
+    serializer_class = RouteDetailListSerializer
+
+    def get_serializer_class(self):
+
+        if self.action == "create":
+            self.serializer_class = RouteCreateSerializer
+        return self.serializer_class
+
+    def get_queryset(self):
+        queryset = self.queryset
+
+        if self.action == "list":
+            sources = (self.request.query_params.get("source"))
+            destinations = (self.request.query_params.get("destination"))
+
+            if sources:
+                sources_list = [
+                    source.strip()
+                    for source in sources.split(",")
+                ]
+                queryset = queryset.filter(
+                    source__closest_big_city__in=sources_list
+                )
+
+            if destinations:
+                destinations_list = [
+                    destination.strip()
+                    for destination in destinations.split(",")
+                ]
+                queryset = queryset.filter(
+                    destination__closest_big_city__in=destinations_list
+                )
+
+        return queryset
