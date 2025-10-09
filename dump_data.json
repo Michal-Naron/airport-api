@@ -1,0 +1,127 @@
+[
+  {
+    "model": "users.User",
+    "pk": 1,
+    "fields": {
+      "username": "michal",
+      "password": "pbkdf2_sha256$260000$examplehash$examplehashvalue",
+      "email": "michal@example.com",
+      "is_staff": false,
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 2,
+    "fields": {
+      "username": "anna",
+      "password": "pbkdf2_sha256$260000$examplehash2$examplehashvalue2",
+      "email": "anna@example.com",
+      "is_staff": false,
+      "is_superuser": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "flights.Crew",
+    "pk": 1,
+    "fields": {
+      "first_name": "John",
+      "second_name": "Doe"
+    }
+  },
+  {
+    "model": "flights.Crew",
+    "pk": 2,
+    "fields": {
+      "first_name": "Jane",
+      "second_name": "Smith"
+    }
+  },
+  {
+    "model": "flights.Airport",
+    "pk": 1,
+    "fields": {
+      "name": "Warsaw Chopin Airport",
+      "closest_big_city": "Warszawa"
+    }
+  },
+  {
+    "model": "flights.Airport",
+    "pk": 2,
+    "fields": {
+      "name": "Barcelona Airport",
+      "closest_big_city": "Barcelona"
+    }
+  },
+  {
+    "model": "flights.Route",
+    "pk": 1,
+    "fields": {
+      "source": 1,
+      "destination": 2,
+      "distance": 1500
+    }
+  },
+  {
+    "model": "flights.AirplaneType",
+    "pk": 1,
+    "fields": {
+      "name": "Boeing 737"
+    }
+  },
+  {
+    "model": "flights.Airplane",
+    "pk": 1,
+    "fields": {
+      "name": "LOT 737",
+      "rows": 30,
+      "seats_in_row": 6,
+      "airplane_type": 1
+    }
+  },
+  {
+    "model": "flights.Flight",
+    "pk": 1,
+    "fields": {
+      "route": 1,
+      "airplane": 1,
+      "crews": [1, 2],
+      "departure_time": "2025-10-10T08:00:00Z",
+      "arrival_time": "2025-10-10T10:30:00Z"
+    }
+  },
+  {
+    "model": "flights.Order",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "created_at": "2025-10-09T12:00:00Z"
+    }
+  },
+  {
+    "model": "flights.Order",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "created_at": "2025-10-09T13:00:00Z"
+    }
+  },
+  {
+    "model": "flights.Ticket",
+    "pk": 1,
+    "fields": {
+      "row": 5,
+      "seat": 3
+    }
+  },
+  {
+    "model": "flights.Ticket",
+    "pk": 2,
+    "fields": {
+      "row": 12,
+      "seat": 4
+    }
+  }
+]
