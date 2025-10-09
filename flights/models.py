@@ -22,7 +22,7 @@ class Route(models.Model):
         Airport,
         on_delete=models.CASCADE,
         related_name="routes_destination")
-    distance = models.IntegerField(max_length=255)
+    distance = models.IntegerField()
 
 
 class AirplaneType(models.Model):
@@ -30,8 +30,8 @@ class AirplaneType(models.Model):
 
 class Airplane(models.Model):
     name = models.CharField(max_length=255)
-    rows = models.IntegerField(max_length=255)
-    seats_in_row = models.IntegerField(max_length=255)
+    rows = models.IntegerField()
+    seats_in_row = models.IntegerField()
     airplane_type = models.ForeignKey(
         AirplaneType,
         on_delete=models.CASCADE,
@@ -63,7 +63,7 @@ class Order(models.Model):
 
 
 class Ticket(models.Model):
-    row = models.IntegerField(max_length=255)
-    seat = models.IntegerField(max_length=255)
+    row = models.IntegerField()
+    seat = models.IntegerField()
 
 
