@@ -70,12 +70,18 @@ class Flight(models.Model):
     departure_time = models.DateTimeField()
     arrival_time = models.DateTimeField()
 
+    def __str__(self):
+        return f"{self.departure_time} {self.airplane}"
+
 class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="Orders")
+        related_name="orders")
+
+    def __str__(self):
+        return self.pk
 
 
 class Ticket(models.Model):
