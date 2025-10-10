@@ -6,7 +6,8 @@ from .models import (
     Airport,
     Route,
     AirplaneType,
-    Airplane
+    Airplane,
+    Crew
 )
 from .serializers import (
     AirportSerializer,
@@ -15,7 +16,8 @@ from .serializers import (
     AirplaneTypeSerializer,
     AirplaneListSerializer,
     AirplaneDetailSerializer,
-    AirplaneCreateSerializer
+    AirplaneCreateSerializer,
+    CrewSerializer
 )
 
 
@@ -93,3 +95,8 @@ class AirplaneViewSet(viewsets.ModelViewSet):
                 number_of_seats=F("rows") * F("seats_in_row")
             )
         return queryset
+
+
+class CrewViewSet(viewsets.ModelViewSet):
+    queryset = Crew.objects.all()
+    serializer_class = CrewSerializer

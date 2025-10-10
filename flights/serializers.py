@@ -4,7 +4,8 @@ from .models import (
     Airport,
     Route,
     AirplaneType,
-    Airplane
+    Airplane,
+    Crew
 )
 
 
@@ -58,4 +59,10 @@ class AirplaneDetailSerializer(serializers.ModelSerializer):
 class AirplaneCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Airplane
+        fields = "__all__"
+
+
+class CrewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Crew
         fields = "__all__"
