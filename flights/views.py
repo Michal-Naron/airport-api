@@ -8,7 +8,7 @@ from .models import (
     AirplaneType,
     Airplane,
     Crew,
-    Flight
+    Flight, Order
 )
 from .serializers import (
     AirportSerializer,
@@ -20,7 +20,10 @@ from .serializers import (
     AirplaneCreateSerializer,
     CrewSerializer,
     FlightListCreateSerializer,
-    FlightDetailSerializer
+    FlightDetailSerializer,
+    OrderSerializer,
+    OrderListAdminSerializer,
+    OrderCreateSerializer
 )
 
 
@@ -148,3 +151,24 @@ class FlightViewSet(viewsets.ModelViewSet):
                     queryset = queryset.filter(arrival_time__icontains=a)
 
         return queryset
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def get_queryset(self):
+        queryset =  self.queryset
+
+        if not self.request.user.is_staff and self.request.user.is_authenticated:
+            queryset = queryset.filter(user=self.request.user.id)
+
+        return queryset
+
+    def get_serializer_class(self):
+        serializer_class = self.serializer_class
+        if self.request.user.is_staff:
+            serializer_class = OrderListAdminSerializer
+        if self.action in ("create", "update"):
+            serializer_class = OrderCreateSerializer
+        return serializer_class

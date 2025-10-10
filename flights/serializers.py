@@ -6,7 +6,8 @@ from .models import (
     AirplaneType,
     Airplane,
     Crew,
-    Flight
+    Flight,
+    Order, Ticket
 )
 
 
@@ -82,4 +83,28 @@ class FlightDetailSerializer(serializers.ModelSerializer):
     number_of_seats = serializers.IntegerField(read_only=True)
     class Meta:
         model = Flight
+        fields = "__all__"
+
+
+class TicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
+        fields = ["row", "seat", "flight", "order"]
+
+class OrderSerializer(serializers.ModelSerializer):
+    tickets = TicketSerializer(many=True, read_only=True)
+    class Meta:
+        model = Order
+        fields = "__all__"
+
+class OrderListAdminSerializer(serializers.ModelSerializer):
+    tickets = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    class Meta:
+        model = Order
+        fields = "__all__"
+
+
+class OrderCreateSerializer(serializers.ModelSerializer):
+    class Mate:
+        model = Order
         fields = "__all__"
