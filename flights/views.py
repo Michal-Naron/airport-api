@@ -1,17 +1,21 @@
 from rest_framework import viewsets
 from rest_framework.exceptions import ValidationError
-
+from django.db.models import F
 
 from .models import (
     Airport,
     Route,
-    AirplaneType
+    AirplaneType,
+    Airplane
 )
 from .serializers import (
     AirportSerializer,
     RouteDetailListSerializer,
     RouteCreateSerializer,
-    AirplaneTypeSerializer
+    AirplaneTypeSerializer,
+    AirplaneListSerializer,
+    AirplaneDetailSerializer,
+    AirplaneCreateSerializer
 )
 
 
@@ -26,7 +30,7 @@ class RouteViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
 
-        if self.action == "create":
+        if self.action in ("create", "update"):
             self.serializer_class = RouteCreateSerializer
         return self.serializer_class
 
@@ -71,4 +75,21 @@ class AirplaneTypeViewSet(viewsets.ModelViewSet):
     serializer_class = AirplaneTypeSerializer
 
 
+class AirplaneViewSet(viewsets.ModelViewSet):
+    queryset = Airplane.objects.all()
+    serializer_class = AirplaneDetailSerializer
 
+    def get_serializer_class(self):
+        if self.action == "list":
+            return AirplaneListSerializer
+        elif self.action in ("create", "update"):
+            return AirplaneCreateSerializer
+        return AirplaneDetailSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.action == "retrieve":
+            queryset = queryset.annotate(
+                number_of_seats=F("rows") * F("seats_in_row")
+            )
+        return queryset

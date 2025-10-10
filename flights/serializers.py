@@ -40,7 +40,22 @@ class AirplaneTypeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class AirplaneSerializer(serializers.ModelSerializer):
+class AirplaneListSerializer(serializers.ModelSerializer):
+    airplane_type = serializers.CharField(source="airplane_type.name")
+    class Meta:
+        model = Airplane
+        fields = "__all__"
+
+
+class AirplaneDetailSerializer(serializers.ModelSerializer):
+    number_of_seats = serializers.IntegerField()
+    airplane_type = serializers.CharField(source="airplane_type.name")
+    class Meta:
+        model = Airplane
+        fields =  ("id","name","rows","seats_in_row","airplane_type"  ,"number_of_seats",)
+
+
+class AirplaneCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Airplane
         fields = "__all__"
