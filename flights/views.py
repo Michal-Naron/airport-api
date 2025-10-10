@@ -7,7 +7,8 @@ from .models import (
     Route,
     AirplaneType,
     Airplane,
-    Crew
+    Crew,
+    Flight
 )
 from .serializers import (
     AirportSerializer,
@@ -17,7 +18,9 @@ from .serializers import (
     AirplaneListSerializer,
     AirplaneDetailSerializer,
     AirplaneCreateSerializer,
-    CrewSerializer
+    CrewSerializer,
+    FlightListCreateSerializer,
+    FlightDetailSerializer
 )
 
 
@@ -100,3 +103,48 @@ class AirplaneViewSet(viewsets.ModelViewSet):
 class CrewViewSet(viewsets.ModelViewSet):
     queryset = Crew.objects.all()
     serializer_class = CrewSerializer
+
+
+class FlightViewSet(viewsets.ModelViewSet):
+    queryset = Flight.objects.all()
+    serializer_class = FlightListCreateSerializer
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            self.serializer_class = FlightDetailSerializer
+        if self.action == "update":
+            self.serializer_class = FlightListCreateSerializer
+        return self.serializer_class
+
+    def get_queryset(self):
+        queryset = self.queryset
+
+        if self.action == "retrieve":
+            queryset = queryset.annotate(
+                number_of_seats=F("airplane__rows") * F(
+                    "airplane__seats_in_row")
+            )
+
+        if self.action == "list":
+            routes = self.request.query_params.get("routes")
+            departures = self.request.query_params.get("departures")
+            arrivals = self.request.query_params.get("arrivals")
+
+            if routes:
+                route_ids = [int(id.strip()) for id in routes.split(",") if
+                             id.strip()]
+                queryset = queryset.filter(route__id__in=route_ids)
+
+            if departures:
+                departure_dates = [d.strip() for d in departures.split(",") if
+                                   d.strip()]
+                for d in departure_dates:
+                    queryset = queryset.filter(departure_time__icontains=d)
+
+            if arrivals:
+                arrival_dates = [a.strip() for a in arrivals.split(",") if
+                                 a.strip()]
+                for a in arrival_dates:
+                    queryset = queryset.filter(arrival_time__icontains=a)
+
+        return queryset
