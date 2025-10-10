@@ -1,127 +1,126 @@
 [
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 1,
     "fields": {
-      "username": "michal",
-      "password": "pbkdf2_sha256$260000$examplehash$examplehashvalue",
-      "email": "michal@example.com",
-      "is_staff": false,
+      "username": "alice",
+      "password": "pbkdf2_sha256$260000$dummy$hash",
       "is_superuser": false,
+      "is_staff": false,
       "is_active": true
     }
   },
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 2,
     "fields": {
-      "username": "anna",
-      "password": "pbkdf2_sha256$260000$examplehash2$examplehashvalue2",
-      "email": "anna@example.com",
-      "is_staff": false,
+      "username": "bob",
+      "password": "pbkdf2_sha256$260000$dummy$hash",
       "is_superuser": false,
+      "is_staff": false,
       "is_active": true
     }
   },
   {
-    "model": "flights.Crew",
+    "model": "flights.crew",
     "pk": 1,
-    "fields": {
-      "first_name": "John",
-      "second_name": "Doe"
-    }
+    "fields": {"first_name": "John", "second_name": "Doe"}
   },
   {
-    "model": "flights.Crew",
+    "model": "flights.crew",
     "pk": 2,
-    "fields": {
-      "first_name": "Jane",
-      "second_name": "Smith"
-    }
+    "fields": {"first_name": "Jane", "second_name": "Smith"}
   },
   {
-    "model": "flights.Airport",
+    "model": "flights.crew",
+    "pk": 3,
+    "fields": {"first_name": "Mike", "second_name": "Brown"}
+  },
+  {
+    "model": "flights.airport",
     "pk": 1,
-    "fields": {
-      "name": "Warsaw Chopin Airport",
-      "closest_big_city": "Warszawa"
-    }
+    "fields": {"name": "JFK International", "closest_big_city": "New York"}
   },
   {
-    "model": "flights.Airport",
+    "model": "flights.airport",
     "pk": 2,
-    "fields": {
-      "name": "Barcelona Airport",
-      "closest_big_city": "Barcelona"
-    }
+    "fields": {"name": "LAX", "closest_big_city": "Los Angeles"}
   },
   {
-    "model": "flights.Route",
+    "model": "flights.airport",
+    "pk": 3,
+    "fields": {"name": "Heathrow", "closest_big_city": "London"}
+  },
+  {
+    "model": "flights.route",
     "pk": 1,
-    "fields": {
-      "source": 1,
-      "destination": 2,
-      "distance": 1500
-    }
+    "fields": {"source": 1, "destination": 2, "distance": 4500}
   },
   {
-    "model": "flights.AirplaneType",
+    "model": "flights.route",
+    "pk": 2,
+    "fields": {"source": 2, "destination": 3, "distance": 8750}
+  },
+  {
+    "model": "flights.airplanetype",
     "pk": 1,
-    "fields": {
-      "name": "Boeing 737"
-    }
+    "fields": {"name": "Boeing 737"}
   },
   {
-    "model": "flights.Airplane",
+    "model": "flights.airplanetype",
+    "pk": 2,
+    "fields": {"name": "Airbus A320"}
+  },
+  {
+    "model": "flights.airplane",
     "pk": 1,
-    "fields": {
-      "name": "LOT 737",
-      "rows": 30,
-      "seats_in_row": 6,
-      "airplane_type": 1
-    }
+    "fields": {"name": "B737-800", "rows": 30, "seats_in_row": 6, "airplane_type": 1}
   },
   {
-    "model": "flights.Flight",
+    "model": "flights.airplane",
+    "pk": 2,
+    "fields": {"name": "A320-200", "rows": 28, "seats_in_row": 6, "airplane_type": 2}
+  },
+  {
+    "model": "flights.flight",
     "pk": 1,
     "fields": {
       "route": 1,
       "airplane": 1,
-      "crews": [1, 2],
-      "departure_time": "2025-10-10T08:00:00Z",
-      "arrival_time": "2025-10-10T10:30:00Z"
+      "departure_time": "2025-10-15T08:00:00Z",
+      "arrival_time": "2025-10-15T12:00:00Z",
+      "crews": [1, 2]
     }
   },
   {
-    "model": "flights.Order",
-    "pk": 1,
-    "fields": {
-      "user": 1,
-      "created_at": "2025-10-09T12:00:00Z"
-    }
-  },
-  {
-    "model": "flights.Order",
+    "model": "flights.flight",
     "pk": 2,
     "fields": {
-      "user": 2,
-      "created_at": "2025-10-09T13:00:00Z"
+      "route": 2,
+      "airplane": 2,
+      "departure_time": "2025-10-16T09:00:00Z",
+      "arrival_time": "2025-10-16T15:00:00Z",
+      "crews": [2, 3]
     }
   },
   {
-    "model": "flights.Ticket",
+    "model": "flights.order",
     "pk": 1,
-    "fields": {
-      "row": 5,
-      "seat": 3
-    }
+    "fields": {"created_at": "2025-10-01T09:00:00Z", "user": 1}
   },
   {
-    "model": "flights.Ticket",
+    "model": "flights.order",
     "pk": 2,
-    "fields": {
-      "row": 12,
-      "seat": 4
-    }
+    "fields": {"created_at": "2025-10-02T10:00:00Z", "user": 2}
+  },
+  {
+    "model": "flights.ticket",
+    "pk": 1,
+    "fields": {"row": 10, "seat": 3, "flight": 1, "order": 1}
+  },
+  {
+    "model": "flights.ticket",
+    "pk": 2,
+    "fields": {"row": 12, "seat": 5, "flight": 2, "order": 2}
   }
 ]
