@@ -7,6 +7,9 @@ class Crew(models.Model):
     first_name = models.CharField(max_length=255)
     second_name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return f"{self.first_name} {self.second_name}"
+
 
 class Airport(models.Model):
     name = models.CharField(max_length=255)
@@ -27,9 +30,16 @@ class Route(models.Model):
         related_name="routes_destination")
     distance = models.IntegerField()
 
+    def __str__(self):
+        return (f"{self.source.closest_big_city}"
+                f" - {self.destination.closest_big_city}")
+
 
 class AirplaneType(models.Model):
     name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
 
 class Airplane(models.Model):
     name = models.CharField(max_length=255)
@@ -40,6 +50,9 @@ class Airplane(models.Model):
         on_delete=models.CASCADE,
         related_name="airplanes"
     )
+
+    def __str__(self):
+        return self.name
 
 
 class Flight(models.Model):
