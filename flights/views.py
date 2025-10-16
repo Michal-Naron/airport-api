@@ -8,7 +8,9 @@ from .models import (
     AirplaneType,
     Airplane,
     Crew,
-    Flight, Order
+    Flight,
+    Order,
+    Ticket
 )
 from .serializers import (
     AirportSerializer,
@@ -23,7 +25,9 @@ from .serializers import (
     FlightDetailSerializer,
     OrderSerializer,
     OrderListAdminSerializer,
-    OrderCreateSerializer
+    OrderCreateSerializer,
+    TicketDetailSerializer,
+    TicketAdminListSerializer
 )
 
 
@@ -171,4 +175,21 @@ class OrderViewSet(viewsets.ModelViewSet):
             serializer_class = OrderListAdminSerializer
         if self.action in ("create", "update"):
             serializer_class = OrderCreateSerializer
+        return serializer_class
+
+
+class TicketViewSet(viewsets.ModelViewSet):
+    serializer_class = TicketDetailSerializer
+    queryset = Ticket.objects.all().select_related("order")
+
+    def get_queryset(self):
+        queryset = self.queryset
+        if self.request.user.is_authenticated and not self.request.user.is_staff:
+            queryset = queryset.filter(order__user__id=self.request.user.id)
+        return queryset
+
+    def get_serializer_class(self):
+        serializer_class = self.serializer_class
+        if self.request.user.is_staff:
+            serializer_class = TicketAdminListSerializer
         return serializer_class

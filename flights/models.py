@@ -81,7 +81,7 @@ class Order(models.Model):
         related_name="orders")
 
     def __str__(self):
-        return self.pk
+        return f"{self.pk}"
 
 
 class Ticket(models.Model):
@@ -98,4 +98,6 @@ class Ticket(models.Model):
         on_delete=models.CASCADE
     )
 
+    def __str__(self):
+        return f"seat:{self.seat} ,row: {self.row}, flight: {self.flight}, order: {self.order}"
 
