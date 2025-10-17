@@ -1,6 +1,16 @@
 from django.db import models
+from django.utils.text import slugify
+import uuid
+import os
 
 from users.models import User
+
+def create_custom_path(instance, filename):
+    _, extension = os.path.splitext(filename)
+    return os.path.join(
+        "uploads/images/",
+        f"{slugify(instance.name)}-{uuid.uuid4()}{extension}"
+    )
 
 
 class Crew(models.Model):
@@ -37,6 +47,7 @@ class Route(models.Model):
 
 class AirplaneType(models.Model):
     name = models.CharField(max_length=255)
+    airplane_image = models.ImageField(null=True, blank=True, upload_to=create_custom_path)
 
     def __str__(self):
         return self.name
