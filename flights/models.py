@@ -47,7 +47,6 @@ class Route(models.Model):
 
 class AirplaneType(models.Model):
     name = models.CharField(max_length=255)
-    airplane_image = models.ImageField(null=True, blank=True, upload_to=create_custom_path)
 
     def __str__(self):
         return self.name
@@ -56,6 +55,8 @@ class Airplane(models.Model):
     name = models.CharField(max_length=255)
     rows = models.IntegerField()
     seats_in_row = models.IntegerField()
+    airplane_image = models.ImageField(null=True, blank=True,
+                                       upload_to=create_custom_path)
     airplane_type = models.ForeignKey(
         AirplaneType,
         on_delete=models.CASCADE,

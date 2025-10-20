@@ -1,6 +1,10 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.decorators import action, permission_classes
 from rest_framework.exceptions import ValidationError
 from django.db.models import F
+from rest_framework.permissions import IsAdminUser
+from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from .models import (
     Airport,
@@ -27,7 +31,8 @@ from .serializers import (
     OrderListAdminSerializer,
     OrderCreateSerializer,
     TicketDetailSerializer,
-    TicketAdminListSerializer
+    TicketAdminListSerializer,
+    AirplaneImageSerializer
 )
 
 
@@ -96,6 +101,8 @@ class AirplaneViewSet(viewsets.ModelViewSet):
             return AirplaneListSerializer
         elif self.action in ("create", "update"):
             return AirplaneCreateSerializer
+        elif self.action == "upload_image":
+            return AirplaneImageSerializer
         return AirplaneDetailSerializer
 
     def get_queryset(self):
@@ -105,6 +112,22 @@ class AirplaneViewSet(viewsets.ModelViewSet):
                 number_of_seats=F("rows") * F("seats_in_row")
             )
         return queryset
+
+    @action(
+        methods=["POST"],
+        detail=True,
+        url_path="upload-image",
+        permission_classes=[IsAdminUser]
+    )
+    def upload_image(self, request, pk=None):
+        item = self.get_object()
+        serializer = self.get_serializer(item, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CrewViewSet(viewsets.ModelViewSet):
