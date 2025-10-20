@@ -115,6 +115,6 @@ class OrderListAdminSerializer(serializers.ModelSerializer):
 
 
 class OrderCreateSerializer(serializers.ModelSerializer):
-    class Mate:
+    class Meta:
         model = Order
         fields = "__all__"
