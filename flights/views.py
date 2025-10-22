@@ -1,11 +1,13 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import action, permission_classes
 from rest_framework.exceptions import ValidationError
 from django.db.models import F
 from rest_framework.permissions import IsAdminUser
+from users.permissions import IsAdminOrReadOnly
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
+from airport_api import settings
 from .models import (
     Airport,
     Route,
@@ -184,6 +186,12 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [permissions.IsAuthenticated()]
+
+        return [IsAdminOrReadOnly()]
+
     def get_queryset(self):
         queryset =  self.queryset
 
@@ -205,6 +213,13 @@ class TicketViewSet(viewsets.ModelViewSet):
     serializer_class = TicketDetailSerializer
     queryset = Ticket.objects.all().select_related("order")
 
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [permissions.IsAuthenticated()]
+
+
+        return [IsAdminOrReadOnly()]
+
     def get_queryset(self):
         queryset = self.queryset
         if self.request.user.is_authenticated and not self.request.user.is_staff:
@@ -215,4 +230,6 @@ class TicketViewSet(viewsets.ModelViewSet):
         serializer_class = self.serializer_class
         if self.request.user.is_staff:
             serializer_class = TicketAdminListSerializer
+        if self.action in ("create", "update"):
+            serializer_class = TicketDetailSerializer
         return serializer_class

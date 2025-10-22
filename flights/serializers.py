@@ -99,6 +99,7 @@ class TicketDetailSerializer(serializers.ModelSerializer):
 
 class TicketAdminListSerializer(serializers.ModelSerializer):
     class Meta:
+        model = Ticket
         fields = ["id", "flight", "order"]
 
 class OrderSerializer(serializers.ModelSerializer):
