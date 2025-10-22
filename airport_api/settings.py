@@ -153,8 +153,8 @@ REST_FRAMEWORK = {
         "users.throttles.AdminUserRateThrottle",
     ],
     "DEFAULT_THROTTLE_RATES": {
-        "user": "10000/day",
-        "admin": "50000/day",
+        "user": "1000/day",
+        "admin": "5000/day",
     }
 
 }
