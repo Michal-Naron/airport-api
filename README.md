@@ -2,8 +2,6 @@
 > A REST API for managing airports, flights, crews, airplanes, and tickets built with Django REST Framework.
 
 ## Check it out!
-[Airport API deployed](#) *(replace with your deployed link if available)*
-
 For demonstration purposes, two user accounts have been created so you can explore the API from different perspectives:
 
 - **michał**
